@@ -441,7 +441,7 @@ model Booking {
 
 ```plaintext
 # ตอบคำถามที่นี่
-
+one-to-many เพราะใช้ [] ถ้าใช้ ? จะเป็น one-to-one และ many-to-many จะใช้ bridge table
 ```
 
 ---
@@ -643,7 +643,14 @@ curl http://localhost:3001/api/reports \
 
 ```plaintext
 # วาง output จาก curl ที่นี่
+curl http://localhost:3001/api/bookings \
+    -H "Authorization: Bearer $TOKEN"
+[{"id":1,"fullname":"สมชาย ใจดี","email":"somchai@example.com","phone":"0812345678","checkin":"2025-08-01T00:00:00.000Z","checkout":"2025-08-03T00:00:00.000Z","roomtype":"standard","guests":2,"status":"pending","comment":null,"roomId":1,"createdAt":"2026-05-07T04:56:01.255Z","room":{"id":1,"roomType":"standard","name":"ห้องมาตรฐาน","description":"ห้องพักสำหรับ 1-2 ท่าน พร้อมสิ่งอำนวยความสะดวกพื้นฐาน","capacity":2,"price":1200,"createdAt":"2026-05-07T04:48:05.665Z"}}]
 
+
+curl http://localhost:3001/api/reports \
+    -H "Authorization: Bearer $TOKEN"
+{"bookings":[{"id":1,"fullname":"สมชาย ใจดี","email":"somchai@example.com","phone":"0812345678","checkin":"2025-08-01T00:00:00.000Z","checkout":"2025-08-03T00:00:00.000Z","roomtype":"standard","guests":2,"status":"pending","comment":null,"roomId":1,"createdAt":"2026-05-07T04:56:01.255Z","room":{"id":1,"roomType":"standard","name":"ห้องมาตรฐาน","description":"ห้องพักสำหรับ 1-2 ท่าน พร้อมสิ่งอำนวยความสะดวกพื้นฐาน","capacity":2,"price":1200,"createdAt":"2026-05-07T04:48:05.665Z"}}],"summaryByRoom":{"ห้องมาตรฐาน":1},"summaryByStatus":{"pending":1},"totalNights":2,"totalBookings":1}
 
 
 ```
@@ -956,12 +963,12 @@ start newman-report.html       # Windows (Git Bash)
 # แนบ screenshot ผลการทดสอบที่นี่
 
 ```
-
+![alt text](<photo/image copy.png>)
 **คำถาม 4.3**: Newman tests ที่เขียนมีการทดสอบทั้ง positive cases (สำเร็จ) และ negative cases (ล้มเหลว) อธิบายให้ครบอย่างน้อย 2 ตัวอย่าง
 
 ```plaintext
 # ตอบคำถามที่นี่
-
+หลังจากทดสอบการพบว่าถ้าส่งข้อมูลไปแบบไม่ถูกต้องหรือไม่ครบก็จะตอบกลับด้วยผลลัพธ์ที่คาดหวังใหม่เพราะ ต้องการให้ไม่สำเร็จ ส่วนผลของการใส่ข้อมูลที่ถูกต้องการเหมือนกันแค่กลับกัน เป็นผลลัพธ์ที่คาดหวังไว้
 ```
 
 ---
@@ -987,7 +994,10 @@ Workflow ที่มีอยู่ใช้ self-hosted runner และทำ
 
 ```plaintext
 # ตอบคำถามที่นี่
-
+การให้คำสั่งทั้งหมดมาทำงานบนเครื่องคอมพิวเตอร์ของตัวเอง
+ต้องการทดสอบการเชื่อมต่อกับ Database หรือ API แบบ local
+ข้อดีรันซ้ำๆเครื่องมีการ Cache ไฟล์หรือ Docker Image ไว้รวมถึงสามารถใช้สเปคเครื่องแรงแค่ไหนก็ได้ตามที่เรามี ไม่ต้องจ่ายค่าเซอร์วิส ข้อเสียเรื่อของความปลอดภัย
+เครื่องจำสถานะเดิมไว้ถ้ามีไฟล์ขยะ ไฟล์ตั้งค่า หรือ Database เก่าค้างอยู่ อาจทำให้ Test พังหรือทำงานผิดพลาดได้
 ```
 
 ### ขั้นตอนที่ 5.2: วิเคราะห์ข้อจำกัดของ Workflow ปัจจุบัน
